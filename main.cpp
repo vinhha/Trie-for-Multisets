@@ -13,47 +13,80 @@ using namespace std;
 
 int main(void)
 {
-    // Test for BasicTrieNodes and TrieNodes
-    BasicTrieNode  *bpointer,*pointer,*ptr;
-    ptr = new TrieNode();
-    bpointer = new BasicTrieNode();
-    cout << bpointer->WhoAmI()<< endl;//
-    pointer = new TrieNode();
-    cout << pointer->WhoAmI()<< endl;//
-    ptr->SetPtr(1,bpointer);
-    ptr->SetPtr(3,pointer);
-    cout << ptr->GetPtr(1)->WhoAmI() << endl;//
-    cout << ptr->GetPtr(3)->WhoAmI() << endl;//
-    
-    // Test for SLL and WBLT
-    MultiSet *ms1, *ms2;
-    ms1=new SLL();
-    ms2=new WBLT();
-    cout << ms1->WhoAmI() << endl;
-    cout << ms2->WhoAmI() << endl;
-    SLLNode *pt1;
-    WBLTNode *pt2;
-    pt1= new SLLNode();
-    pt2= new WBLTNode();
-    cout <<  ms1->WhoAmI() << endl;
-    cout <<  ms2->WhoAmI() << endl;
-    ms1->SetFirst(pt1);
-    ms2->SetRoot(pt2);
-    
-    
-    // Using CheckTrie
-    // int temp;
-    // Trie t;
-    // Assume that t has been initialized correctly
-    // temp=0;
-    // if(t.GetRoot()->CheckTrie(&temp)) cout << "True " << temp << endl;
-    //           else cout << "False 0" << endl;
-    // MultiSet  *q;
-    // temp=0;
-    // Assume that q points to a MultiSet (SLL or WBLT)
-    //  if (q->Check(&temp)) cout << "True " << temp << " ";
-    //        else cout << "False 0 ";
-    //  cout << q->WhoAmI()-2 << endl;
-    //
+    string oper,s,t;
+    Trie* trie = new Trie();
+    int x;
+    while(1 == 1)
+    { cin >> oper;
+        
+        if (oper == "Quit") {// delete everything then end program
+            break;
+        }
+        
+        else if (oper == "Insert")
+        {   cin >> s >> x;
+            char * cstr = new char [s.length()+1];
+            std::strcpy (cstr, s.c_str());
+            trie->Insert(cstr, x);
+        }
+        
+        else if (oper == "Create")
+        {   cin >> s;
+            char * cstr = new char [s.length()+1];
+            std::strcpy (cstr, s.c_str());
+            trie->Create(cstr);
+        }
+        
+        else if (oper == "Delete")
+        {   cin >> s;
+            char * cstr = new char [s.length()+1];
+            std::strcpy (cstr, s.c_str());
+            trie->Delete(cstr);
+        }
+        
+        else if (oper == "CheckTrie")
+        {
+            int temp;
+            // Assume that t has been initialized correctly
+            temp=0;
+            if(trie->GetRoot()->CheckTrie(&temp)) cout << "True " << temp << endl;
+                       else cout << "False 0" << endl;
+        }
+        
+        else if (oper == "CountN")
+        {
+            trie->CountN();
+        }
+        
+        else if (oper == "CountNT")
+        {
+            trie->CountNT();
+        }
+        
+        else if (oper == "DeleteAll")
+        {
+            cin >> s;
+            char * cstr = new char [s.length()+1];
+            std::strcpy (cstr, s.c_str());
+            trie->DeleteAll(cstr);
+        }
+        
+        else if (oper == "PrintNum")
+        {
+            cin >> s;
+            char * cstr = new char [s.length()+1];
+            std::strcpy (cstr, s.c_str());
+            trie->PrintNum(cstr);
+        }
+        
+        else if (oper == "PrintType")
+        {
+            cin >> s;
+            char * cstr = new char [s.length()+1];
+            std::strcpy (cstr, s.c_str());
+            trie->PrintType(cstr);
+        }
+        // ...
+    }
     return 0;
 }

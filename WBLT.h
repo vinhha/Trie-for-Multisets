@@ -16,10 +16,15 @@ public:
     bool Check(int*);
     //Helper functions...
     void Place(int x);//Implement
-    int GetLength();//Implement
+    int GetLength(){return 0;}//Implement
     void TransformSet();//Implement
-    virtual void DeleteSet();//Impliment
-
+    void DeleteSet();//Impliment
+    void DeleteElem(int x);
+    void DeleteGEElem(int x);
+    void Merge(WBLT* tree);
+    int GetMax(){return 0;}
+    int GetCount(){return 0;}
+    
 };
 
 #endif

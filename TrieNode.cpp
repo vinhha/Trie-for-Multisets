@@ -1,4 +1,8 @@
 #include "TrieNode.h"
+#include <iostream> 
+
+using namespace std; 
+
 
 //Constructor
 TrieNode::TrieNode(){
@@ -13,23 +17,58 @@ TrieNode::TrieNode(){
 bool TrieNode::CheckTrie(int* pcount){
     int i,countl;
     countl= *pcount;
-    for(i=0; i<TrieMaxElem; i++)
-    {if(GetPtr(i)!=0)
-        if(!GetPtr(i)->CheckTrie(pcount)) {return false;}
+    for(i=0; i<TrieMaxElem; i++){
+        if(GetPtr(i)!=0){
+            if(!GetPtr(i)->CheckTrie(pcount)){
+                return false;
+            }
+        }
     }
     if(countl == *pcount) return false;
     if (GetPtr2MS() != 0) (*pcount)++;
     return true;
 }
 
-bool TrieNode::CheckTrieNodeEmpty(BasicTrieNode* current){
+bool TrieNode::CheckTrieNodeEmpty(){
     if (MSDefined()) {
         return false;
     }
     for (int i = 0; i<TrieMaxElem; i++){
-        if (GetPtr(i)) {
+        if (GetPtr(i) != 0) {
             return false;
         }
     }
     return true;
 }
+
+int TrieNode::Count(){
+    int result = 0;
+    if (GetPtr2MS() != 0) {
+        result += 1;
+    }
+    for (int i = 0; i < TrieMaxElem; i++){
+        if (GetPtr(i) != 0)
+            result += GetPtr(i)->Count();
+    }
+    return result;
+}
+
+int TrieNode::CountAll(){
+    int result = 0;
+    if (GetPtr2MS() != 0) {
+        result += CountMS();
+    }
+    for (int i = 0; i < TrieMaxElem; i++){
+        if (GetPtr(i) != 0){
+            if(GetPtr(i)->WhoAmI() == 1)
+                result += GetPtr(i)->CountMS();
+            else
+                result += GetPtr(i)->CountAll();
+        }
+    }
+    return result;
+}
+
+
+
+

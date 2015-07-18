@@ -10,6 +10,168 @@ bool SLL::Check(int* pcount)
 }
 
 //Helper functions...
-void Place(int x){}
-int GetLength(){}
-void TransformSet(){}
+void SLL::Place(int x){}
+void SLL::TransformSet(){}
+
+void SLL::DeleteSet(){
+    
+    SLLNode* current = GetFirst();
+    if (current == 0) {
+        return;
+    }
+    DeleteSet(current);
+    
+}
+
+void SLL::DeleteSet(SLLNode* current){
+    if (current->GetNext() == 0) {
+        delete current;
+        return;
+    }
+    DeleteSet(current->GetNext());
+    delete current;
+    return;
+}
+
+void SLL::Merge(SLLNode* set){
+    SetFirst(Merge(GetFirst(), set));
+
+}
+
+SLLNode* SLL::Merge(SLLNode *a, SLLNode *b){
+
+    SLLNode* result = NULL;
+    
+    if (a == NULL)
+        return(b);
+    else if (b==NULL)
+        return(a);
+    
+    if (a->GetData() <= b->GetData())
+    {
+        result = a;
+        result->SetNext(Merge(a->GetNext(), b));
+    }
+    else
+    {
+        result = b;
+        result->SetNext(Merge(a, b->GetNext()));
+    }
+    return(result);
+    
+}
+
+void SLL::DeleteElem(int x){
+
+        SLLNode *pPre = NULL, *pDel = NULL;
+        
+        if (GetFirst()->GetData() == x) {
+            pDel = GetFirst();
+            SetFirst(pDel->GetNext());
+            delete pDel;
+            return;
+        }
+        
+        pPre = GetFirst();
+        pDel = GetFirst()->GetNext();
+        
+        /* traverse the list and check the value of each node */
+        while (pDel != NULL) {
+            if (pDel->GetData() == x) {
+                /* Update the list */
+                pPre->SetNext(pDel->GetNext());
+                /* If it is the last node, update the tail */
+                delete pDel; /* Here only remove the first node with the given value */
+                break; /* break and return */
+            }
+            pPre = pDel;
+            pDel = pDel->GetNext();
+        }
+}
+
+void SLL::DeleteGEElem(int x){
+    SLLNode *pPre = NULL, *pDel = NULL;
+    
+    if (GetFirst()->GetData() == x) {
+        pDel = GetFirst();
+        SetFirst(pDel->GetNext());
+        delete pDel;
+        return;
+    }
+    
+    pPre = GetFirst();
+    pDel = GetFirst()->GetNext();
+    
+    /* traverse the list and check the value of each node */
+    while (pDel != NULL) {
+        if (pDel->GetData() >= x) {
+            /* Update the list */
+            pPre->SetNext(pDel->GetNext());
+            /* If it is the last node, update the tail */
+            delete pDel; /* Here only remove the first node with the given value */
+            pDel = pPre->GetNext();
+        }
+        else{
+            pPre = pDel;
+            pDel = pDel->GetNext();
+        }
+    }
+}
+
+int SLL::GetMax(){
+    
+    SLLNode* node = GetFirst();
+    if (node == 0) {
+        return 0; 
+    }
+    while (node->GetNext() != 0) {
+        node = node->GetNext();
+    }
+    return node->GetData();
+    
+}
+
+int SLL::GetLength(){
+    
+    SLLNode* node = GetFirst();
+    if (node == 0) {
+        return 0;
+    }
+    int i = 1;
+    while (node->GetNext() != 0) {
+        node = node->GetNext();
+        i += 1;
+    }
+    return i;
+    
+}
+
+int SLL::GetCount(int x){
+    int i = 0;
+    SLLNode* node = GetFirst();
+    if (node == 0) {
+        return 0;
+    }
+    if (node->GetData() == x) {
+        int i = 1;
+    }
+    while (node->GetNext() != 0) {
+        node = node->GetNext();
+        if (node->GetData() == x) {
+            i += 1;
+        }
+    }
+    return i;
+}
+
+
+
+
+
+
+
+
+
+
+
+

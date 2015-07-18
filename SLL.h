@@ -8,6 +8,8 @@
 class SLL: public MultiSet{
 private:
     SLLNode* first;
+    void DeleteSet(SLLNode* current);
+    SLLNode* Merge(SLLNode *a, SLLNode *b);
 public:
     SLL(){first = 0; SetPtr2PV(0);}
     int WhoAmI(){return 3;}
@@ -18,7 +20,13 @@ public:
     void Place(int x);//Implement
     int GetLength();//Implement
     void TransformSet();//Implement
-    virtual void DeleteSet();//Implement
+    void DeleteSet();//Implement
+    void Merge(SLLNode* set);
+    void DeleteElem(int x);
+    void DeleteGEElem(int x);
+    int GetMax();
+    int GetCount(int x);
+
 };
 
 

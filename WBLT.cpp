@@ -11,6 +11,8 @@ bool WBLT::Check(int* pcount)
 
 
 //Helper functions...
-void Place(int x){}
-int GetLength(){}
-void TransformSet(){}
+void WBLT::Place(int x){}
+void WBLT::TransformSet(){}
+void WBLT::DeleteSet(){}
+void WBLT::DeleteElem(int){}
+void WBLT::DeleteGEElem(int){}

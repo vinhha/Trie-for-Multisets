@@ -2,13 +2,20 @@
 #define TRIE_H
 
 #include <iostream>
+#include <stdio.h>
+#include <string> 
 #include "BasicTrieNode.h"
 #include "TrieNode.h"
+#include "SLL.h"
+#include "WBLT.h"
+#include "SLLNode.h"
+#include "WBLTNode.h"
 
 class Trie {
 private:
     BasicTrieNode *root;
     bool Delete(char s[], int i, BasicTrieNode *current);
+    void DeleteAllMS(MultiSet* set);
 public:
     Trie();
     bool CheckTrie(int*);
@@ -31,7 +38,10 @@ public:
     void Check(char s[]);
     void Quit();
     //Helper functions below..
-    BasicTrieNode* GetSet(char s[]); 
+    BasicTrieNode* GetSet(char s[]);
+    BasicTrieNode* GetRoot(){return root;}
+    void PrintType(char s[]);
+
 };
 
 #endif
