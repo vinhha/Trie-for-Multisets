@@ -10,7 +10,29 @@ bool SLL::Check(int* pcount)
 }
 
 //Helper functions...
-void SLL::Place(int x){}
+void SLL::Place(int x){
+    SLLNode* current;
+    SLLNode* new_node = new SLLNode();
+    new_node->SetData(x);
+    /* Special case for the head end */
+    if (GetFirst() == NULL || GetFirst()->GetData() >= new_node->GetData())
+    {
+        new_node->SetNext(GetFirst());
+        SetFirst(new_node);
+    }
+    else
+    {
+        /* Locate the node before the point of insertion */
+        current = GetFirst();
+        while (current->GetNext() !=NULL &&
+               current->GetNext()->GetData() < new_node->GetData())
+        {
+            current = current->GetNext();
+        }
+        new_node->SetNext(current->GetNext());
+        current->SetNext(new_node);
+    }
+}
 void SLL::TransformSet(){}
 
 void SLL::DeleteSet(){
@@ -33,19 +55,20 @@ void SLL::DeleteSet(SLLNode* current){
     return;
 }
 
-void SLL::Merge(SLLNode* set){
-    SetFirst(Merge(GetFirst(), set));
-
+void SLL::Merge(MultiSet* set){
+    SetFirst(Merge(GetFirst(), set->GetFirst()));
+    set->SetFirst(0);
 }
 
-SLLNode* SLL::Merge(SLLNode *a, SLLNode *b){
-
+SLLNode* SLL::Merge(SLLNode* a, SLLNode* b){
     SLLNode* result = NULL;
     
-    if (a == NULL)
-        return(b);
-    else if (b==NULL)
-        return(a);
+    if (a == NULL){
+        return b;
+    }
+    else if (b == NULL){
+        return a;
+    }
     
     if (a->GetData() <= b->GetData())
     {
@@ -57,7 +80,7 @@ SLLNode* SLL::Merge(SLLNode *a, SLLNode *b){
         result = b;
         result->SetNext(Merge(a, b->GetNext()));
     }
-    return(result);
+    return result;
     
 }
 

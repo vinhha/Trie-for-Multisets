@@ -44,7 +44,6 @@ int BasicTrieNode::Count(){
 int BasicTrieNode::CountMS(){
     int result = 0;
     if (!MSDefined()) {
-        cout << "NO-OPPPP" << endl; 
         return 0;
     }
     MultiSet* ms = GetPtr2MS();

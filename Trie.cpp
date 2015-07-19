@@ -65,7 +65,7 @@ void Trie::Create(char s[]){
 
 void Trie::Insert(char s[], int x){
     BasicTrieNode *set = GetSet(s);
-    if (set != NULL) {
+    if (set != NULL && set->GetPtr2MS() != NULL) {
         if (set->GetPtr2MS()->GetLength() == 0) {
             SLLNode* value = new SLLNode();
             value->SetData(x);
@@ -320,20 +320,49 @@ void Trie::CountNT(){
 
 void Trie::PrintNumGT(char s[]){
     //Ask the professor to clarify..?
+    int result = 0;
+    BasicTrieNode *current = root;
+    int i = 0;
+    while (s[i] != NULL) {
+        int j = (s[i] - 'a') + 1;
+        for (j; j<TrieMaxElem; j++) {
+            if (current->GetPtr(j) != 0) {
+                if(current->GetPtr(j)->WhoAmI() == 1)
+                    result += current->GetPtr(j)->CountMS();
+                else
+                    result += current->GetPtr(j)->CountGT(j);
+            }
+        }
+        if (current->GetPtr(s[i] - 'a') == 0) {
+            break;
+        }
+        else{
+            current = current->GetPtr(s[i] - 'a');
+            i = i + 1;
+        }
+        if (current->WhoAmI() == 2 && s[i] == NULL) {
+            result += current->CountAll() - current->CountMS();
+        }
+    }
+
+    
+    cout << to_string(result) << endl;
 }
+
+
 
 //************************************************************ Needs Implementation
 
 void Trie::DeleteGT(char s[]){
     //Once again, ask the professor to clarify
     //"...multisets with names after name < s >."
+    
 }
 
 //************************************************************ Needs Implementation
 
 void Trie::Check(char s[]){
     //Apparently appendix 3 has the code for this operation...?
-    
 }
 
 //************************************************************ Needs Implementation
@@ -364,7 +393,7 @@ BasicTrieNode* Trie::GetSet(char s[]){
     while (s[i] != NULL) {
         int j = s[i] - 'a';
         if (current->GetPtr(j) == 0) {
-            return NULL; //No-op..
+            return NULL;
         }
         else
             current = current->GetPtr(j);

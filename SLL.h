@@ -21,7 +21,7 @@ public:
     int GetLength();//Implement
     void TransformSet();//Implement
     void DeleteSet();//Implement
-    void Merge(SLLNode* set);
+    void Merge(MultiSet* set);
     void DeleteElem(int x);
     void DeleteGEElem(int x);
     int GetMax();

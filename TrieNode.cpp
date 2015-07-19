@@ -69,6 +69,22 @@ int TrieNode::CountAll(){
     return result;
 }
 
+int TrieNode::CountGT(int x){
+    int result = 0;
+    if (GetPtr2MS() != 0) {
+        result += CountMS();
+    }
+    for (int i = 0; i < TrieMaxElem; i++){
+        if (GetPtr(i) != 0){
+            if(GetPtr(i)->WhoAmI() == 1)
+                result += GetPtr(i)->CountMS();
+            else
+                result += GetPtr(i)->CountAll();
+        }
+    }
+    return result;
+}
+
 
 
 

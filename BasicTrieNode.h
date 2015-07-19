@@ -28,6 +28,7 @@ public:
     virtual int Count();
     int CountMS();
     virtual int CountAll(){}
+    virtual int CountGT(int x){}
 };
 
 #endif 

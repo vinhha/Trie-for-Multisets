@@ -17,7 +17,8 @@ public:
     //Helper functions...
     bool CheckTrieNodeEmpty();
     int Count();
-    int CountAll(); 
+    int CountAll();
+    int CountGT(int x);
 };
 
 #endif 

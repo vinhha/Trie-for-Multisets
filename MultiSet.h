@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include "SLLNode.h"
 #include "WBLTNode.h"
+#include <iostream> 
+
+using namespace std; 
 
 class MultiSet{
 private:

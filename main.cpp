@@ -86,7 +86,88 @@ int main(void)
             std::strcpy (cstr, s.c_str());
             trie->PrintType(cstr);
         }
-        // ...
+        
+        else if (oper == "Merge")
+        {
+            cin >> s >> t;
+            char * cstr_s = new char [s.length()+1];
+            std::strcpy (cstr_s, s.c_str());
+            char * cstr_t = new char [t.length()+1];
+            std::strcpy (cstr_t, t.c_str());
+            trie->Merge(cstr_s, cstr_t);
+        }
+        
+        else if (oper == "DeleteElem")
+        {
+            cin >> s >> x;
+            char * cstr = new char [s.length()+1];
+            std::strcpy (cstr, s.c_str());
+            trie->DeleteElem(cstr, x);
+        }
+        
+        else if (oper == "DeleteGEElem")
+        {
+            cin >> s >> x;
+            char * cstr = new char [s.length()+1];
+            std::strcpy (cstr, s.c_str());
+            trie->DeleteGEElem(cstr, x);
+        }
+        
+        else if (oper == "DeleteMin")
+        {
+            cin >> s;
+            char * cstr = new char [s.length()+1];
+            std::strcpy (cstr, s.c_str());
+            trie->DeleteMin(cstr);
+        }
+        
+        else if (oper == "PrintMax")
+        {
+            cin >> s;
+            char * cstr = new char [s.length()+1];
+            std::strcpy (cstr, s.c_str());
+            trie->PrintMax(cstr);
+        }
+        
+        else if (oper == "PrintMin")
+        {
+            cin >> s;
+            char * cstr = new char [s.length()+1];
+            std::strcpy (cstr, s.c_str());
+            trie->PrintMin(cstr);
+        }
+        
+        else if (oper == "PrintCount")
+        {
+            cin >> s >> x;
+            char * cstr = new char [s.length()+1];
+            std::strcpy (cstr, s.c_str());
+            trie->PrintCount(cstr, x);
+        }
+        
+        else if (oper == "PrintNumGT")
+        {
+            cin >> s;
+            char * cstr = new char [s.length()+1];
+            std::strcpy (cstr, s.c_str());
+            trie->PrintNumGT(cstr);
+        }
+        
+        else if (oper == "DeleteGT")
+        {
+            cin >> s;
+            char * cstr = new char [s.length()+1];
+            std::strcpy (cstr, s.c_str());
+            trie->DeleteGT(cstr);
+        }
+        
+        else if (oper == "CheckTrie")
+        {
+            int temp=0;
+             if(trie->CheckTrie(&temp)) cout << "True " << temp << endl;
+                       else cout << "False 0" << endl;
+        }
+        
     }
     return 0;
 }
