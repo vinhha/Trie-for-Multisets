@@ -24,7 +24,7 @@ public:
     virtual bool Check(int*){}
     //Helper functions...
     virtual void Place(int x){}
-    virtual void TransformSet(){}
+    virtual MultiSet* TransformSet(){}
     virtual void DeleteSet(){}
     virtual void Merge(MultiSet* set){}
     virtual void DeleteElem(int x){}
@@ -32,6 +32,10 @@ public:
     virtual int GetMax(){}
     virtual int GetLength(){}
     virtual int GetCount(int x){}
+    virtual void Meld(){}
+    virtual void DeleteMin(){}
+    virtual WBLTNode* Merge(WBLTNode* node1, WBLTNode* node2){}
+
 };
 
 #endif

@@ -12,6 +12,7 @@ private:
     SLLNode* Merge(SLLNode *a, SLLNode *b);
 public:
     SLL(){first = 0; SetPtr2PV(0);}
+    ~SLL(){DeleteSet();}
     int WhoAmI(){return 3;}
     SLLNode* GetFirst(){return first;}
     void SetFirst(SLLNode* ptr){first=ptr;}
@@ -19,7 +20,6 @@ public:
     //Helper functions...
     void Place(int x);//Implement
     int GetLength();//Implement
-    void TransformSet();//Implement
     void DeleteSet();//Implement
     void Merge(MultiSet* set);
     void DeleteElem(int x);

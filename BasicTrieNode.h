@@ -17,7 +17,7 @@ public:
     virtual int WhoAmI() {return(1);}
     virtual bool CheckTrie(int*);
     virtual void SetPtr(int i, BasicTrieNode* j){}
-    virtual bool CheckTrieNodeEmpty(){}
+    virtual bool CheckTrieNodeEmpty();
     virtual BasicTrieNode* GetPtr(int i){}
     void SetPtr2MS(MultiSet* ptr){ptr2ms = ptr;}
     MultiSet* GetPtr2MS(){return ptr2ms;}
@@ -29,6 +29,8 @@ public:
     int CountMS();
     virtual int CountAll(){}
     virtual int CountGT(int x){}
+    virtual bool CheckPtrs(){}
+
 };
 
 #endif 

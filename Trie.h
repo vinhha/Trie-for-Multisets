@@ -16,6 +16,11 @@ private:
     BasicTrieNode *root;
     bool Delete(char s[], int i, BasicTrieNode *current);
     void DeleteAllMS(MultiSet* set);
+    int DeleteGT(BasicTrieNode* current, int i, char s[]);
+    void CorrectPath(char s[]);
+    int Delete_GT(BasicTrieNode *current);
+    void Quit(BasicTrieNode* current);
+    void Transform2SLL(SLL* set, WBLTNode* node); 
 public:
     Trie();
     bool CheckTrie(int*);
@@ -40,7 +45,9 @@ public:
     //Helper functions below..
     BasicTrieNode* GetSet(char s[]);
     BasicTrieNode* GetRoot(){return root;}
-    void PrintType(char s[]);
+    int useSLL, useWBLT;
+    SLL* Transform2SLL(MultiSet* set);
+    WBLT* Transform2WBLT(MultiSet* set);
 
 };
 

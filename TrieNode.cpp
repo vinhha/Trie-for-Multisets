@@ -24,7 +24,7 @@ bool TrieNode::CheckTrie(int* pcount){
             }
         }
     }
-    if(countl == *pcount) return false;
+    if(countl == *pcount) {return false;}
     if (GetPtr2MS() != 0) (*pcount)++;
     return true;
 }
@@ -33,6 +33,15 @@ bool TrieNode::CheckTrieNodeEmpty(){
     if (MSDefined()) {
         return false;
     }
+    for (int i = 0; i<TrieMaxElem; i++){
+        if (GetPtr(i) != 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool TrieNode::CheckPtrs(){
     for (int i = 0; i<TrieMaxElem; i++){
         if (GetPtr(i) != 0) {
             return false;

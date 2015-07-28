@@ -3,7 +3,7 @@
 using namespace std;
 
 bool BasicTrieNode::CheckTrie(int* pcount){
-    if(ptr2ms == 0) {return false;}
+    if(ptr2ms == 0) { return false;}
     (*pcount)++;
     return true;
 }
@@ -31,6 +31,14 @@ void BasicTrieNode::DeleteCurrentMS(){
             ii. Delete current MultiSet
         b. Otherwise, just delete the current MultiSet and set the Multiset pointer to 0
      */
+}
+
+bool BasicTrieNode::CheckTrieNodeEmpty(){
+    
+    if (GetPtr2MS() == 0) {
+        return true;
+    }
+    return false; 
 }
 
 int BasicTrieNode::Count(){

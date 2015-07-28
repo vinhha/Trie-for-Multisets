@@ -1,5 +1,5 @@
 #include "Trie.h"
-
+#include <string.h>
 using namespace std;
 
 //Constructor
@@ -72,15 +72,19 @@ void Trie::Insert(char s[], int x){
             set->GetPtr2MS()->SetFirst(value);
         }
         else{
-            if (set->GetPtr2MS()->GetLength() == 8) {//Remember to change the 8!!!!!!!
-                set->GetPtr2MS()->TransformSet();
+            if (set->GetPtr2MS()->GetLength() + 1 == useWBLT) {
+                MultiSet *temp = set->GetPtr2MS();
+                //********************************************
+                MultiSet *a = Transform2WBLT(temp);
+                //********************************************
+                a->SetPtr2PV(temp->GetPtr2PV());
+                set->SetPtr2MS(a);
+                delete temp;
             }
             set->GetPtr2MS()->Place(x);
         }
     }
     else{
-        
-        cout << "No-op" << endl;
     }
     /*
      Function Description:
@@ -94,6 +98,45 @@ void Trie::Insert(char s[], int x){
      */
 }
 
+//************************************************************ Transform to WBLT
+
+WBLT* Trie::Transform2WBLT(MultiSet* set){
+    SLLNode* current = set->GetFirst();
+    if (current != 0) {
+        WBLT* a = new WBLT();
+        while (current) {
+            a->Place(current->GetData());
+            current = current->GetNext();
+        }
+        return a;
+    }
+    return 0;
+    
+}
+
+//************************************************************ Transform to SLL
+
+SLL* Trie::Transform2SLL(MultiSet* set){
+    WBLTNode* node = set->GetRoot();
+    if (node) {
+        SLL* set = new SLL();
+        Transform2SLL(set, node);
+        return set;
+    }
+    return 0;
+}
+
+void Trie::Transform2SLL(SLL* set, WBLTNode* node){
+    if (node == NULL) {
+        return;
+    }
+    else{
+        set->Place(node->GetData());
+        Transform2SLL(set, node->GetLeftChild());
+        Transform2SLL(set, node->GetRightChild());
+    }
+}
+
 //************************************************************ Queued for SLL
 
 void Trie::Delete(char s[]){
@@ -102,10 +145,11 @@ void Trie::Delete(char s[]){
     if (s[i] == NULL) {
         return;
     }
+
     bool j = Delete(s, i, current);
     
     /*
-     Function Description: 
+     Function Description:
      1. Set a pointer to the root of the trie
      2. If the input string is nothing then return
      3. Run Delete(char s[], int i, BasicTrieNode* current)
@@ -121,7 +165,7 @@ bool Trie::Delete(char s[], int i, BasicTrieNode *current){
             }
             //Check if Node is empty or not, and if trie node has any further paths (if statement)
             //if its empty and no more multisets then delete node and return true
-            if (current->CheckTrieNodeEmpty() || current->WhoAmI() == 1) {
+            if (current->CheckTrieNodeEmpty() /*|| current->WhoAmI() == 1*/) {
                 delete current;
                 return true;
             }
@@ -130,8 +174,19 @@ bool Trie::Delete(char s[], int i, BasicTrieNode *current){
             if (Delete(s, i + 1, current->GetPtr(s[i] - 'a'))) {
                 current->SetPtr(s[i] - 'a', 0);
                 if (i != 0 && current->CheckTrieNodeEmpty()) {
-                    delete[] current;
+                    delete current;
                     return true;
+                }
+            }
+            else {
+                if (current->GetPtr(s[i] - 'a')) {
+                    if (current->GetPtr(s[i] - 'a')->CheckPtrs() && current->GetPtr(s[i] - 'a')->WhoAmI() == 2 && current->GetPtr(s[i] - 'a')->GetPtr2MS() != 0){
+                        BasicTrieNode* trie = new BasicTrieNode();
+                        trie->SetPtr2MS(current->GetPtr(s[i] - 'a')->GetPtr2MS());
+                        BasicTrieNode *temp = current->GetPtr(s[i] - 'a');
+                        delete temp;
+                        current->SetPtr(s[i] - 'a', trie);
+                    }
                 }
             }
         }
@@ -160,19 +215,57 @@ void Trie::Merge(char s[], char t[]){
     BasicTrieNode* set_2 = this->GetSet(t);
     //If either do not exist exit with no-op
     if (set_1 == NULL || set_2 == NULL) {
-        cout << "No-op" << endl;
         return;
     }
+    
     //Give current version of s[] all elements of t[]
     //WRITE MERGE FUNCTIONS UNDER MULTISET CLASS FILES
     //(t[] will be empty)
-    if (set_1->GetPtr2MS()->WhoAmI() == 3 && set_2->GetPtr2MS()->WhoAmI() == 3) {
+    if (set_1->GetPtr2MS()->GetLength() + set_2->GetPtr2MS()->GetLength() >= useWBLT){
+        if (set_1->GetPtr2MS()->WhoAmI() == 3 && set_2->GetPtr2MS()->WhoAmI() == 3){
+            set_1->GetPtr2MS()->Merge(set_2->GetPtr2MS());
+            MultiSet *temp = set_1->GetPtr2MS();
+            //********************************************
+            MultiSet *a = Transform2WBLT(temp);
+            //********************************************
+            a->SetPtr2PV(temp->GetPtr2PV());
+            set_1->SetPtr2MS(a);
+            delete temp;
+        }
+        else if (set_1->GetPtr2MS()->WhoAmI() == 3 && set_2->GetPtr2MS()->WhoAmI() == 4){
+            MultiSet *temp = set_1->GetPtr2MS();
+            //********************************************
+            MultiSet *a = Transform2WBLT(temp);
+            //********************************************
+            a->SetPtr2PV(temp->GetPtr2PV());
+            set_1->SetPtr2MS(a);
+            delete temp;
+            set_1->GetPtr2MS()->SetRoot(set_1->GetPtr2MS()->Merge(set_1->GetPtr2MS()->GetRoot(), set_2->GetPtr2MS()->GetRoot()));
+            set_2->GetPtr2MS()->SetRoot(0);
+        }
+        else if (set_1->GetPtr2MS()->WhoAmI() == 4 && set_2->GetPtr2MS()->WhoAmI() == 3){
+            MultiSet *temp = set_2->GetPtr2MS();
+            //********************************************
+            MultiSet *a = Transform2WBLT(temp);
+            //********************************************
+            a->SetPtr2PV(temp->GetPtr2PV());
+            set_2->SetPtr2MS(a);
+            delete temp;
+            set_1->GetPtr2MS()->SetRoot(set_1->GetPtr2MS()->Merge(set_1->GetPtr2MS()->GetRoot(), set_2->GetPtr2MS()->GetRoot()));
+            set_2->GetPtr2MS()->SetRoot(0);
+        }
+        else if (set_1->GetPtr2MS()->WhoAmI() == 4 && set_2->GetPtr2MS()->WhoAmI() == 4){
+            set_1->GetPtr2MS()->SetRoot(set_1->GetPtr2MS()->Merge(set_1->GetPtr2MS()->GetRoot(), set_2->GetPtr2MS()->GetRoot()));
+            set_2->GetPtr2MS()->SetRoot(0);
+        }
+    }
+    
+    
+    else if (set_1->GetPtr2MS()->WhoAmI() == 3 && set_2->GetPtr2MS()->WhoAmI() == 3) {
         set_1->GetPtr2MS()->Merge(set_2->GetPtr2MS());
     }
-    MultiSet *ms_2 = set_2->GetPtr2MS();
-    if (set_2->GetPtr2MS()->GetPtr2PV() != 0) {
-        set_2->SetPtr2MS(set_2->GetPtr2MS()->GetPtr2PV());
-    }
+
+    
 }
 
 //************************************************************ Queued for SLL
@@ -180,13 +273,10 @@ void Trie::Merge(char s[], char t[]){
 void Trie::DeleteAll(char s[]){
     //Set BasicTrieNode* to s[]
     BasicTrieNode* set = this->GetSet(s);
-    if (set == NULL) {
+    if (set == NULL || set->GetPtr2MS() == 0) {
         return; // No-op
     }
     //Recursively iterate down Multisets until ptr2previousVersion == NULL
-    if (set->GetPtr2MS() == 0) {
-        return;
-    }
     DeleteAllMS(set->GetPtr2MS());
     //Delete ptr2previousVersion and delete up the tree
     set->SetPtr2MS(0);
@@ -208,7 +298,7 @@ void Trie::DeleteAllMS(MultiSet* set){
 void Trie::DeleteElem(char s[], int x){
     //Set BasicTrieNode* to s[]
     BasicTrieNode* set = GetSet(s);
-    if (set == NULL) {
+    if (set == NULL || set->GetPtr2MS() == NULL) {
         return; // No-op
     }
     //Search for x in current multiset of s
@@ -222,13 +312,15 @@ void Trie::DeleteElem(char s[], int x){
 void Trie::DeleteGEElem(char s[], int x){
     //Set BasicTrieNode* to s[]
     BasicTrieNode* set = GetSet(s);
-    if (set == NULL) {
+    if (set == NULL){
         return; // No-op
+    }
+    if (set->GetPtr2MS() == 0){
+      return;
     }
     //Check through multiset
     //For each value in multiset > x delete element
     set->GetPtr2MS()->DeleteGEElem(x);
-
 }
 
 //************************************************************ Queued for SLL
@@ -236,13 +328,28 @@ void Trie::DeleteGEElem(char s[], int x){
 void Trie::DeleteMin(char s[]){
     //Set BasicTrieNode* to s[]
     BasicTrieNode* set = GetSet(s);
-    if (set == NULL) {
+    if (set == NULL || set->GetPtr2MS() == NULL) {
         return; // No-op
     }
     //Find smallest element in current multiset and remove
-    SLLNode* til = set->GetPtr2MS()->GetFirst();
-    set->GetPtr2MS()->SetFirst(til->GetNext());
-    delete til;
+    if (set->GetPtr2MS()->WhoAmI() == 3) {
+      if (set->GetPtr2MS()->GetFirst() == NULL) {
+	return;
+      }
+      SLLNode* til = set->GetPtr2MS()->GetFirst();
+      set->GetPtr2MS()->SetFirst(til->GetNext());
+      delete til;
+    }
+    if (set->GetPtr2MS()->WhoAmI() == 4) {
+        set->GetPtr2MS()->DeleteMin();
+        if (set->GetPtr2MS()->GetLength() < useSLL) {
+            MultiSet *temp = set->GetPtr2MS();
+            MultiSet *a = Transform2SLL(temp);
+            a->SetPtr2PV(set->GetPtr2MS()->GetPtr2PV());
+            set->SetPtr2MS(a);
+            delete temp;
+        }
+    }
 
 }
 
@@ -251,11 +358,24 @@ void Trie::DeleteMin(char s[]){
 void Trie::PrintMin(char s[]){
     //Set BasicTrieNode* to s[]
     BasicTrieNode* set = GetSet(s);
-    if (set == NULL) {
+    if (set == NULL || set->GetPtr2MS() == 0) {
         return; // No-op
     }
+    if (set->GetPtr2MS()->WhoAmI() == 3) {
+        if (set->GetPtr2MS()->GetFirst() == 0) {
+            return;
+        }
+    }
+    if (set->GetPtr2MS()->WhoAmI() == 4) {
+        if (set->GetPtr2MS()->GetRoot() == 0) {
+            return;
+        }
+    }
     //Find smallest element in current multiset and print
-    cout << set->GetPtr2MS()->GetFirst()->GetData() << endl;
+    if (set->GetPtr2MS()->WhoAmI() == 3)
+        cout << set->GetPtr2MS()->GetFirst()->GetData() << endl;
+    else if (set->GetPtr2MS()->WhoAmI() == 4)
+        cout << set->GetPtr2MS()->GetRoot()->GetData() << endl;
 }
 
 //************************************************************ Queued for SLL
@@ -265,6 +385,16 @@ void Trie::PrintMax(char s[]){
     BasicTrieNode* set = GetSet(s);
     if (set == NULL || set->GetPtr2MS() == 0) {
         return; // No-op
+    }
+    if (set->GetPtr2MS()->WhoAmI() == 3) {
+        if (set->GetPtr2MS()->GetFirst() == 0) {
+            return;
+        }
+    }
+    if (set->GetPtr2MS()->WhoAmI() == 4) {
+        if (set->GetPtr2MS()->GetRoot() == 0) {
+            return;
+        }
     }
     //Find largest element in current multiset and print
     MultiSet* ms = set->GetPtr2MS();
@@ -279,10 +409,16 @@ void Trie::PrintNum(char s[]){
     if (set == NULL) {
         return; // No-op
     }
+    if (!set->GetPtr2MS()) {
+      return; 
+    }
     //Use a counter and iterate through elements in current multiset
     //Print counter
     MultiSet* ms = set->GetPtr2MS();
+    cout << "fillip" << endl;
+    cout << ms->WhoAmI() << endl;
     cout << ms->GetLength() << endl;
+    cout << "mikel" << endl;
 }
 
 //************************************************************ Queued for SLL
@@ -305,7 +441,7 @@ void Trie::PrintCount(char s[], int x){
 void Trie::CountN(){
     BasicTrieNode* rootNode = this->root;
     int count = rootNode->Count();
-    cout << to_string(count) << endl;
+    cout << count << endl;
 }
 
 //************************************************************ Queued
@@ -319,7 +455,6 @@ void Trie::CountNT(){
 //************************************************************ Needs Implementation
 
 void Trie::PrintNumGT(char s[]){
-    //Ask the professor to clarify..?
     int result = 0;
     BasicTrieNode *current = root;
     int i = 0;
@@ -346,7 +481,7 @@ void Trie::PrintNumGT(char s[]){
     }
 
     
-    cout << to_string(result) << endl;
+    cout << result << endl;
 }
 
 
@@ -354,20 +489,169 @@ void Trie::PrintNumGT(char s[]){
 //************************************************************ Needs Implementation
 
 void Trie::DeleteGT(char s[]){
-    //Once again, ask the professor to clarify
-    //"...multisets with names after name < s >."
+    BasicTrieNode *current = root;
+    int i = 0;
+    if (s[i] == NULL) {
+        return;
+    }
     
+    int j = DeleteGT(current, i, s);
+
 }
 
+int Trie::DeleteGT(BasicTrieNode* current, int i, char s[]){
+    
+    if (current != 0) {
+        if (s[i] == NULL) {
+            //Delete MultiSet -- Function should be defined in BasicTrieNode Class
+            //Check if Node is empty or not, and if trie node has any further paths (if statement)
+            //if its empty and no more multisets then delete node and return true
+	  //r == 1 implies set parent node to 0 at this pointer location. 
+	  //r == 2 implies change from trie node to basic trie node
+            if (current->WhoAmI() == 2) {
+                for (int i = 0; i < TrieMaxElem; i++) {
+                    if (current->GetPtr(i) != 0) {
+                        int r = Delete_GT(current->GetPtr(i));
+                        if(r == 1){
+                            current->SetPtr(i, 0);
+                        }
+                        if(r == 2){
+                            BasicTrieNode* trie = new BasicTrieNode();
+                            trie->SetPtr2MS(current->GetPtr(i)->GetPtr2MS());
+                            BasicTrieNode *temp = current->GetPtr(i);
+                            delete temp;
+                            current->SetPtr(i, trie);
+                        }
+                    }
+                }
+                if(current->CheckPtrs() && current->GetPtr2MS() == 0){
+                    return 1;
+                }
+                if (current->GetPtr2MS() != 0 && current->CheckPtrs()) {
+                    return 2;
+                }
+	    }
+            else if (current->GetPtr2MS() == 0 && current->WhoAmI() == 1) {
+                delete current;
+                return 1;
+            }
+
+
+        }
+        else {
+            int j = (s[i] - 'a') + 1;
+            for (j; j<TrieMaxElem; j++) {
+                if (current->GetPtr(j) != 0) {
+                    int r = Delete_GT(current->GetPtr(j));
+                    if(r == 1){
+                        current->SetPtr(j, 0);
+                    }
+                    if(r == 2){
+                        BasicTrieNode* trie = new BasicTrieNode();
+                        trie->SetPtr2MS(current->GetPtr(i)->GetPtr2MS());
+                        BasicTrieNode *temp = current->GetPtr(i);
+                        delete temp;
+                        current->SetPtr(i, trie);
+                    }
+
+                }
+            }
+            int r = DeleteGT(current->GetPtr(s[i] - 'a'), i + 1, s);
+            if (r == 1) {
+                current->SetPtr(s[i] - 'a', 0);
+                if (i != 0 && current->CheckPtrs() && current->GetPtr2MS() == 0) {
+                    delete current;
+                    return 1;
+                }
+            }
+            else if (r == 2){
+                BasicTrieNode* trie = new BasicTrieNode();
+                trie->SetPtr2MS(current->GetPtr(s[i]-'a')->GetPtr2MS());
+                BasicTrieNode *temp = current->GetPtr(i);
+                delete temp;
+                current->SetPtr(s[i]-'a', trie);
+            }
+
+        }
+        
+    }
+    return 0;
+}
+
+int Trie::Delete_GT(BasicTrieNode *current){
+    if (current->GetPtr2MS() != 0) {
+        current->DeleteCurrentMS();
+    }
+    if (current->WhoAmI() == 2) {
+        for (int i = 0; i < TrieMaxElem; i++) {
+            if (current->GetPtr(i) != 0) {
+                int r = Delete_GT(current->GetPtr(i));
+                if(r == 1){
+                    current->SetPtr(i, 0);
+                }
+                if(r == 2){
+                    BasicTrieNode* trie = new BasicTrieNode();
+                    trie->SetPtr2MS(current->GetPtr(i)->GetPtr2MS());
+                    BasicTrieNode *temp = current->GetPtr(i);
+                    delete temp;
+                    current->SetPtr(i, trie);
+                }
+            }
+        }
+        if(current->CheckPtrs() && current->GetPtr2MS() == 0){
+            delete current;
+            return 1;
+        }
+        if (current->GetPtr2MS() != 0 && current->CheckPtrs()) {
+            return 2;
+        }
+    }
+    if (current->GetPtr2MS() == 0 && current->WhoAmI() == 1) {
+        delete current;
+        return 1;
+    }
+    return 0;
+}
 //************************************************************ Needs Implementation
 
 void Trie::Check(char s[]){
-    //Apparently appendix 3 has the code for this operation...?
+    BasicTrieNode* set = GetSet(s);
+    if (set == NULL || set->GetPtr2MS() == 0) {
+        return; // No-op
+    }
+
+    int temp=0;
+    if (set->GetPtr2MS()->Check(&temp)) cout << "True " << temp << " ";
+        else cout << "False 0 ";
+    cout << set->GetPtr2MS()->WhoAmI()-2 << endl;
 }
 
 //************************************************************ Needs Implementation
 
 void Trie::Quit(){
+    BasicTrieNode* current = root;
+    for (int i = 0; i < TrieMaxElem; i++) {
+        if (current->GetPtr(i) != 0) {
+            Quit(current->GetPtr(i));
+        }
+    }
+    delete current;
+
+}
+
+void Trie::Quit(BasicTrieNode* current){
+    if (current->GetPtr2MS() != 0) {
+        DeleteAllMS(current->GetPtr2MS());
+    }
+    if (current->WhoAmI() == 2) {
+        for (int i = 0; i < TrieMaxElem; i++) {
+            if (current->GetPtr(i) != 0) {
+                Quit(current->GetPtr(i));
+            }
+        }
+    }
+
+    delete current;
 
 }
 
@@ -375,6 +659,9 @@ void Trie::Quit(){
 //************************************************************
 
 bool Trie::CheckTrie(int* count){
+    if (root->CheckTrieNodeEmpty()) {
+        return true; 
+    }
     int countl;
     countl=0;
     bool result;
@@ -403,12 +690,6 @@ BasicTrieNode* Trie::GetSet(char s[]){
     return current;
 }
 
-void Trie::PrintType(char s[]){
-    BasicTrieNode* set = GetSet(s);
-    if (set->GetPtr2MS()->WhoAmI() == 3) {
-        cout << "SLL-TYPE" << endl;
-    }
-}
 
 
 

@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string>
+#include <string.h>
 #include "Trie.h"
 #include "BasicTrieNode.h"
 #include "MultiSet.h"
@@ -16,41 +16,34 @@ int main(void)
     string oper,s,t;
     Trie* trie = new Trie();
     int x;
+    cin >> trie->useSLL >> trie->useWBLT;
     while(1 == 1)
     { cin >> oper;
-        
         if (oper == "Quit") {// delete everything then end program
+            trie->Quit(); 
             break;
         }
         
         else if (oper == "Insert")
         {   cin >> s >> x;
             char * cstr = new char [s.length()+1];
-            std::strcpy (cstr, s.c_str());
-            trie->Insert(cstr, x);
+            strcpy (cstr, s.c_str());
+	    trie->Insert(cstr, x);
         }
         
         else if (oper == "Create")
         {   cin >> s;
             char * cstr = new char [s.length()+1];
-            std::strcpy (cstr, s.c_str());
+            strcpy (cstr, s.c_str());
             trie->Create(cstr);
         }
         
-        else if (oper == "Delete")
-        {   cin >> s;
+        else if (oper == "Delete"){
+	  cin >> s;
             char * cstr = new char [s.length()+1];
-            std::strcpy (cstr, s.c_str());
+            strcpy (cstr, s.c_str());
+            cout << cstr << endl;
             trie->Delete(cstr);
-        }
-        
-        else if (oper == "CheckTrie")
-        {
-            int temp;
-            // Assume that t has been initialized correctly
-            temp=0;
-            if(trie->GetRoot()->CheckTrie(&temp)) cout << "True " << temp << endl;
-                       else cout << "False 0" << endl;
         }
         
         else if (oper == "CountN")
@@ -67,7 +60,7 @@ int main(void)
         {
             cin >> s;
             char * cstr = new char [s.length()+1];
-            std::strcpy (cstr, s.c_str());
+            strcpy (cstr, s.c_str());
             trie->DeleteAll(cstr);
         }
         
@@ -75,25 +68,16 @@ int main(void)
         {
             cin >> s;
             char * cstr = new char [s.length()+1];
-            std::strcpy (cstr, s.c_str());
+            strcpy (cstr, s.c_str());
             trie->PrintNum(cstr);
         }
-        
-        else if (oper == "PrintType")
-        {
-            cin >> s;
-            char * cstr = new char [s.length()+1];
-            std::strcpy (cstr, s.c_str());
-            trie->PrintType(cstr);
-        }
-        
         else if (oper == "Merge")
         {
             cin >> s >> t;
             char * cstr_s = new char [s.length()+1];
-            std::strcpy (cstr_s, s.c_str());
+            strcpy (cstr_s, s.c_str());
             char * cstr_t = new char [t.length()+1];
-            std::strcpy (cstr_t, t.c_str());
+            strcpy (cstr_t, t.c_str());
             trie->Merge(cstr_s, cstr_t);
         }
         
@@ -101,7 +85,7 @@ int main(void)
         {
             cin >> s >> x;
             char * cstr = new char [s.length()+1];
-            std::strcpy (cstr, s.c_str());
+            strcpy (cstr, s.c_str());
             trie->DeleteElem(cstr, x);
         }
         
@@ -109,7 +93,7 @@ int main(void)
         {
             cin >> s >> x;
             char * cstr = new char [s.length()+1];
-            std::strcpy (cstr, s.c_str());
+            strcpy (cstr, s.c_str());
             trie->DeleteGEElem(cstr, x);
         }
         
@@ -117,7 +101,7 @@ int main(void)
         {
             cin >> s;
             char * cstr = new char [s.length()+1];
-            std::strcpy (cstr, s.c_str());
+            strcpy (cstr, s.c_str());
             trie->DeleteMin(cstr);
         }
         
@@ -125,7 +109,7 @@ int main(void)
         {
             cin >> s;
             char * cstr = new char [s.length()+1];
-            std::strcpy (cstr, s.c_str());
+            strcpy (cstr, s.c_str());
             trie->PrintMax(cstr);
         }
         
@@ -133,7 +117,7 @@ int main(void)
         {
             cin >> s;
             char * cstr = new char [s.length()+1];
-            std::strcpy (cstr, s.c_str());
+            strcpy (cstr, s.c_str());
             trie->PrintMin(cstr);
         }
         
@@ -141,7 +125,7 @@ int main(void)
         {
             cin >> s >> x;
             char * cstr = new char [s.length()+1];
-            std::strcpy (cstr, s.c_str());
+            strcpy (cstr, s.c_str());
             trie->PrintCount(cstr, x);
         }
         
@@ -149,7 +133,7 @@ int main(void)
         {
             cin >> s;
             char * cstr = new char [s.length()+1];
-            std::strcpy (cstr, s.c_str());
+            strcpy (cstr, s.c_str());
             trie->PrintNumGT(cstr);
         }
         
@@ -157,14 +141,23 @@ int main(void)
         {
             cin >> s;
             char * cstr = new char [s.length()+1];
-            std::strcpy (cstr, s.c_str());
+            strcpy (cstr, s.c_str());
             trie->DeleteGT(cstr);
+        }
+        
+        else if (oper == "Check")
+        {
+            cin >> s;
+            char * cstr = new char [s.length()+1];
+            strcpy (cstr, s.c_str());
+            trie->Check(cstr);
         }
         
         else if (oper == "CheckTrie")
         {
+
             int temp=0;
-             if(trie->CheckTrie(&temp)) cout << "True " << temp << endl;
+            if(trie->CheckTrie(&temp)) cout << "True " << temp << endl;
                        else cout << "False 0" << endl;
         }
         

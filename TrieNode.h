@@ -19,6 +19,7 @@ public:
     int Count();
     int CountAll();
     int CountGT(int x);
+    bool CheckPtrs();
 };
 
 #endif 
