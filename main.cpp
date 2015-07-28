@@ -19,6 +19,7 @@ int main(void)
     cin >> trie->useSLL >> trie->useWBLT;
     while(1 == 1)
     { cin >> oper;
+      cout << oper << endl;
         if (oper == "Quit") {// delete everything then end program
             trie->Quit(); 
             break;
@@ -84,7 +85,8 @@ int main(void)
         else if (oper == "DeleteElem")
         {
             cin >> s >> x;
-            char * cstr = new char [s.length()+1];
+	    cout << s << endl;
+	    char * cstr = new char [s.length()+1];
             strcpy (cstr, s.c_str());
             trie->DeleteElem(cstr, x);
         }
@@ -92,6 +94,7 @@ int main(void)
         else if (oper == "DeleteGEElem")
         {
             cin >> s >> x;
+	    cout << s << endl;
             char * cstr = new char [s.length()+1];
             strcpy (cstr, s.c_str());
             trie->DeleteGEElem(cstr, x);

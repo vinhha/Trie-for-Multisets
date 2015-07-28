@@ -51,15 +51,15 @@ bool TrieNode::CheckPtrs(){
 }
 
 int TrieNode::Count(){
-    int result = 0;
-    if (GetPtr2MS() != 0) {
-        result += 1;
-    }
-    for (int i = 0; i < TrieMaxElem; i++){
-        if (GetPtr(i) != 0)
-            result += GetPtr(i)->Count();
-    }
-    return result;
+  int result = 0;
+  if (GetPtr2MS() != 0) {
+    result += 1;
+  }
+  for (int i = 0; i < TrieMaxElem; i++){
+    if (GetPtr(i))
+      result += GetPtr(i)->Count();
+  }
+  return result;
 }
 
 int TrieNode::CountAll(){

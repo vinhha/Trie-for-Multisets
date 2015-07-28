@@ -145,7 +145,6 @@ void Trie::Delete(char s[]){
     if (s[i] == NULL) {
         return;
     }
-
     bool j = Delete(s, i, current);
     
     /*
@@ -159,9 +158,9 @@ void Trie::Delete(char s[]){
 bool Trie::Delete(char s[], int i, BasicTrieNode *current){
     if (current != 0) {
         if (s[i] == NULL) {
-            //Delete MultiSet -- Function should be defined in BasicTrieNode Class
-            if (current->GetPtr2MS() != NULL) {
-                current->DeleteCurrentMS();
+	  //Delete MultiSet -- Function should be defined in BasicTrieNode Class
+           if (current->GetPtr2MS() != NULL) {
+	      current->DeleteCurrentMS();
             }
             //Check if Node is empty or not, and if trie node has any further paths (if statement)
             //if its empty and no more multisets then delete node and return true
@@ -170,7 +169,7 @@ bool Trie::Delete(char s[], int i, BasicTrieNode *current){
                 return true;
             }
         }
-        else {
+        else if(current->WhoAmI() == 2){
             if (Delete(s, i + 1, current->GetPtr(s[i] - 'a'))) {
                 current->SetPtr(s[i] - 'a', 0);
                 if (i != 0 && current->CheckTrieNodeEmpty()) {
@@ -382,10 +381,13 @@ void Trie::PrintMin(char s[]){
 
 void Trie::PrintMax(char s[]){
     //Set BasicTrieNode* to s[]
+  cout << "ello" << endl;
     BasicTrieNode* set = GetSet(s);
     if (set == NULL || set->GetPtr2MS() == 0) {
         return; // No-op
     }
+    cout << "f1" << endl;
+    cout << set->GetPtr2MS()->WhoAmI() << endl;
     if (set->GetPtr2MS()->WhoAmI() == 3) {
         if (set->GetPtr2MS()->GetFirst() == 0) {
             return;
@@ -415,10 +417,7 @@ void Trie::PrintNum(char s[]){
     //Use a counter and iterate through elements in current multiset
     //Print counter
     MultiSet* ms = set->GetPtr2MS();
-    cout << "fillip" << endl;
-    cout << ms->WhoAmI() << endl;
     cout << ms->GetLength() << endl;
-    cout << "mikel" << endl;
 }
 
 //************************************************************ Queued for SLL
@@ -426,13 +425,16 @@ void Trie::PrintNum(char s[]){
 void Trie::PrintCount(char s[], int x){
     //Set BasicTrieNode* to s[]
     BasicTrieNode* set = GetSet(s);
-    if (set == NULL) {
+    cout << "h1" << endl;
+    if (set == NULL || set->GetPtr2MS() == 0) {
         return; // No-op
     }
     //Initialize counter and iterate over current multiset
     //Increment counter for every occurence of x
     //Print counter value
     MultiSet* ms = set->GetPtr2MS();
+    cout << "h2" << endl;
+    cout << ms->WhoAmI() << endl;
     cout << ms->GetCount(x) << endl;
 }
 
@@ -525,7 +527,8 @@ int Trie::DeleteGT(BasicTrieNode* current, int i, char s[]){
                     }
                 }
                 if(current->CheckPtrs() && current->GetPtr2MS() == 0){
-                    return 1;
+		  delete current; 
+		  return 1;
                 }
                 if (current->GetPtr2MS() != 0 && current->CheckPtrs()) {
                     return 2;
@@ -538,7 +541,7 @@ int Trie::DeleteGT(BasicTrieNode* current, int i, char s[]){
 
 
         }
-        else {
+        else if (current->WhoAmI() == 2) {
             int j = (s[i] - 'a') + 1;
             for (j; j<TrieMaxElem; j++) {
                 if (current->GetPtr(j) != 0) {
@@ -678,14 +681,16 @@ BasicTrieNode* Trie::GetSet(char s[]){
     BasicTrieNode* current = root;
     int i = 0;
     while (s[i] != NULL) {
-        int j = s[i] - 'a';
-        if (current->GetPtr(j) == 0) {
-            return NULL;
-        }
-        else
-            current = current->GetPtr(j);
-        i = i + 1;
-
+      if(current->WhoAmI() == 1)
+	return NULL;
+      int j = s[i] - 'a';
+      if (current->GetPtr(j) == 0) {
+	return NULL;
+      }
+      else
+	current = current->GetPtr(j);
+      i = i + 1;
+      
     }
     return current;
 }
