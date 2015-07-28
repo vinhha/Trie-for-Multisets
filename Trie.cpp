@@ -213,13 +213,15 @@ void Trie::Merge(char s[], char t[]){
     //Run BasicTrieNode* down t[]
     BasicTrieNode* set_2 = this->GetSet(t);
     //If either do not exist exit with no-op
-    if (set_1 == NULL || set_2 == NULL) {
+    if (set_1 == NULL || set_2 == NULL || set_1->GetPtr2MS() == NULL || set_2->GetPtr2MS() == NULL) {
         return;
     }
     
     //Give current version of s[] all elements of t[]
     //WRITE MERGE FUNCTIONS UNDER MULTISET CLASS FILES
     //(t[] will be empty)
+    cout << set_1->GetPtr2MS()->WhoAmI() << endl;
+    cout << set_2->GetPtr2MS()->WhoAmI() << endl;
     if (set_1->GetPtr2MS()->GetLength() + set_2->GetPtr2MS()->GetLength() >= useWBLT){
         if (set_1->GetPtr2MS()->WhoAmI() == 3 && set_2->GetPtr2MS()->WhoAmI() == 3){
             set_1->GetPtr2MS()->Merge(set_2->GetPtr2MS());
