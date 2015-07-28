@@ -43,7 +43,6 @@ bool BasicTrieNode::CheckTrieNodeEmpty(){
 
 int BasicTrieNode::Count(){
     int result = 0;
-    cout << "c2" << endl;
     if (GetPtr2MS() != 0) {
         result = 1;
     }

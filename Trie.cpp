@@ -220,8 +220,6 @@ void Trie::Merge(char s[], char t[]){
     //Give current version of s[] all elements of t[]
     //WRITE MERGE FUNCTIONS UNDER MULTISET CLASS FILES
     //(t[] will be empty)
-    cout << set_1->GetPtr2MS()->WhoAmI() << endl;
-    cout << set_2->GetPtr2MS()->WhoAmI() << endl;
     if (set_1->GetPtr2MS()->GetLength() + set_2->GetPtr2MS()->GetLength() >= useWBLT){
         if (set_1->GetPtr2MS()->WhoAmI() == 3 && set_2->GetPtr2MS()->WhoAmI() == 3){
             set_1->GetPtr2MS()->Merge(set_2->GetPtr2MS());
@@ -383,13 +381,10 @@ void Trie::PrintMin(char s[]){
 
 void Trie::PrintMax(char s[]){
     //Set BasicTrieNode* to s[]
-  cout << "ello" << endl;
     BasicTrieNode* set = GetSet(s);
     if (set == NULL || set->GetPtr2MS() == 0) {
         return; // No-op
     }
-    cout << "f1" << endl;
-    cout << set->GetPtr2MS()->WhoAmI() << endl;
     if (set->GetPtr2MS()->WhoAmI() == 3) {
         if (set->GetPtr2MS()->GetFirst() == 0) {
             return;
@@ -427,7 +422,6 @@ void Trie::PrintNum(char s[]){
 void Trie::PrintCount(char s[], int x){
     //Set BasicTrieNode* to s[]
     BasicTrieNode* set = GetSet(s);
-    cout << "h1" << endl;
     if (set == NULL || set->GetPtr2MS() == 0) {
         return; // No-op
     }
@@ -435,8 +429,6 @@ void Trie::PrintCount(char s[], int x){
     //Increment counter for every occurence of x
     //Print counter value
     MultiSet* ms = set->GetPtr2MS();
-    cout << "h2" << endl;
-    cout << ms->WhoAmI() << endl;
     cout << ms->GetCount(x) << endl;
 }
 

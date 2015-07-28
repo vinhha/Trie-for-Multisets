@@ -17,63 +17,57 @@ int main(void)
     Trie* trie = new Trie();
     int x;
     cin >> trie->useSLL >> trie->useWBLT;
-    while(1 == 1)
-    { cin >> oper;
-      cout << oper << endl;
+    while(1 == 1){
+        
+        cin >> oper;
         if (oper == "Quit") {// delete everything then end program
             trie->Quit(); 
             break;
         }
         
-        else if (oper == "Insert")
-        {   cin >> s >> x;
+        else if (oper == "Insert"){
+            cin >> s >> x;
             char * cstr = new char [s.length()+1];
             strcpy (cstr, s.c_str());
-	    trie->Insert(cstr, x);
+            trie->Insert(cstr, x);
         }
         
-        else if (oper == "Create")
-        {   cin >> s;
+        else if (oper == "Create"){
+            cin >> s;
             char * cstr = new char [s.length()+1];
             strcpy (cstr, s.c_str());
             trie->Create(cstr);
         }
         
         else if (oper == "Delete"){
-	  cin >> s;
+            cin >> s;
             char * cstr = new char [s.length()+1];
             strcpy (cstr, s.c_str());
-            cout << cstr << endl;
             trie->Delete(cstr);
         }
         
-        else if (oper == "CountN")
-        {
+        else if (oper == "CountN"){
             trie->CountN();
         }
         
-        else if (oper == "CountNT")
-        {
+        else if (oper == "CountNT"){
             trie->CountNT();
         }
         
-        else if (oper == "DeleteAll")
-        {
+        else if (oper == "DeleteAll"){
             cin >> s;
             char * cstr = new char [s.length()+1];
             strcpy (cstr, s.c_str());
             trie->DeleteAll(cstr);
         }
         
-        else if (oper == "PrintNum")
-        {
+        else if (oper == "PrintNum"){
             cin >> s;
             char * cstr = new char [s.length()+1];
             strcpy (cstr, s.c_str());
             trie->PrintNum(cstr);
         }
-        else if (oper == "Merge")
-        {
+        else if (oper == "Merge"){
             cin >> s >> t;
             char * cstr_s = new char [s.length()+1];
             strcpy (cstr_s, s.c_str());
@@ -82,26 +76,21 @@ int main(void)
             trie->Merge(cstr_s, cstr_t);
         }
         
-        else if (oper == "DeleteElem")
-        {
+        else if (oper == "DeleteElem"){
             cin >> s >> x;
-	    cout << s << endl;
-	    char * cstr = new char [s.length()+1];
+            char * cstr = new char [s.length()+1];
             strcpy (cstr, s.c_str());
             trie->DeleteElem(cstr, x);
         }
         
-        else if (oper == "DeleteGEElem")
-        {
+        else if (oper == "DeleteGEElem"){
             cin >> s >> x;
-	    cout << s << endl;
             char * cstr = new char [s.length()+1];
             strcpy (cstr, s.c_str());
             trie->DeleteGEElem(cstr, x);
         }
         
-        else if (oper == "DeleteMin")
-        {
+        else if (oper == "DeleteMin"){
             cin >> s;
             char * cstr = new char [s.length()+1];
             strcpy (cstr, s.c_str());
@@ -124,16 +113,14 @@ int main(void)
             trie->PrintMin(cstr);
         }
         
-        else if (oper == "PrintCount")
-        {
+        else if (oper == "PrintCount"){
             cin >> s >> x;
             char * cstr = new char [s.length()+1];
             strcpy (cstr, s.c_str());
             trie->PrintCount(cstr, x);
         }
         
-        else if (oper == "PrintNumGT")
-        {
+        else if (oper == "PrintNumGT"){
             cin >> s;
             char * cstr = new char [s.length()+1];
             strcpy (cstr, s.c_str());

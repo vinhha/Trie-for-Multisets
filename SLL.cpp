@@ -85,8 +85,7 @@ SLLNode* SLL::Merge(SLLNode* a, SLLNode* b){
 }
 
 void SLL::DeleteElem(int x){
-  cout << x << endl;
-        SLLNode *pPre = NULL, *pDel = NULL;
+    SLLNode *pPre = NULL, *pDel = NULL;
 	if(GetFirst()){
         if (GetFirst()->GetData() == x) {
             pDel = GetFirst();
@@ -97,7 +96,6 @@ void SLL::DeleteElem(int x){
 	if (GetFirst()->GetNext()){
         pPre = GetFirst();
         pDel = GetFirst()->GetNext();
-        cout << "fukkk" << endl;
         /* traverse the list and check the value of each node */
         while (pDel != NULL) {
             if (pDel->GetData() == x) {
